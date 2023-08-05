@@ -4,7 +4,7 @@
   "description": "Boost creation of Helm charts. Quickly preview your Helm templates as you go.",
   "version": "0.0.1",
   "license": "LICENSE.md",
-  "publisher": "Vadzim Nestsiarenka",
+  "publisher": "VadzimNestsiarenka",
   "icon": "./images/icon.png",
   "engines": {
     "vscode": "^1.80.0"
