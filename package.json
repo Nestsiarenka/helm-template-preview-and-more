@@ -2,7 +2,11 @@
   "name": "helm-template-preview-and-more",
   "displayName": "Helm Template Preview",
   "description": "Boost creation of Helm charts. Quickly preview your Helm templates as you go.",
-  "version": "0.0.2",
+  "keywords": [
+    "helm",
+    "helm-template"
+  ],
+  "version": "1.0.0",
   "license": "LICENSE.md",
   "publisher": "VadzimNestsiarenka",
   "icon": "./images/icon.png",
