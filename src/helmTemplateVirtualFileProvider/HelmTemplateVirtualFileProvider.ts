@@ -48,22 +48,54 @@ class HelmTemplateVirtualFileProvider
       );
     }
 
-    try {
-      const stdout = execSync(
-        `helm template . --show-only ${templateFileRelativePath}`,
-        {
-          cwd: rootChartPath,
-        }
-      ).toString();
+    const { stdout, stderr } = this.runHelmTemplate(
+      rootChartPath,
+      templateFileRelativePath,
+      false
+    );
 
-      return stdout;
-    } catch (e) {
+    if (stderr) {
       vscode.window.showErrorMessage(
-        `Error trying to render helm template: ${e}`
+        `Error trying to render helm template: ${stderr.toString()}`
+      );
+
+      let { stdout: stdoutDebug } = this.runHelmTemplate(
+        rootChartPath,
+        templateFileRelativePath,
+        true
+      );
+
+      return (
+        `#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#You have an error somewhere in your chart.
+#The template was attempted to be built in debug mode.
+#If an output under the message is empty, probably the attempt is failed.
+#See the error message popped up for details.
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        ` + stdoutDebug.toString()
       );
     }
 
-    return "";
+    return stdout.toString();
+  }
+
+  runHelmTemplate(
+    rootChartPath: string,
+    templateFileRelativePath: string,
+    isDebug: boolean
+  ): { stdout: Buffer; stderr?: Buffer } {
+    try {
+      const command = `helm template . --show-only ${templateFileRelativePath}${
+        isDebug ? " --debug" : ""
+      }`;
+      const stdout = execSync(command, {
+        cwd: rootChartPath,
+      });
+
+      return { stdout };
+    } catch (e) {
+      return e as { stdout: Buffer; stderr: Buffer };
+    }
   }
 
   static fileName = "HelmTemplatePreview.yaml";

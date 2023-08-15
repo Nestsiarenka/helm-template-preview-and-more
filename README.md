@@ -14,6 +14,8 @@ The preview is rerendered when Helm template is saved or active editor is change
 
 Preview of your subchart templates should work as well.
 
+Preview uses `helm template` command with `--debug` flag. When there is an error in the chart you will see debug output of the template if it's available. And details of the error in the error toast.
+
 ## Requirements
 
 You need to have [Helm CLI](https://helm.sh/docs/intro/install/) installed and available in your PATH. Because preview runs 'helm template' command.
