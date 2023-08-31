@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Editor title button that opens preview. The button is shown when a file in the editor has yaml or yml extension and it is located in the templates folder.
 
+### Changed
+
+- When preview is opened focus is preserved on the current active editor.
+
 ## 1.0.0 - 2023-08-15
 
 ### Changed
