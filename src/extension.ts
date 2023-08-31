@@ -46,6 +46,7 @@ async function renderHelmTemplate() {
 
   await vscode.window.showTextDocument(document, {
     preview: false,
+    preserveFocus: true,
     viewColumn: vscode.ViewColumn.Beside,
   });
 }
