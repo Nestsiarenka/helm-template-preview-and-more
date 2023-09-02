@@ -6,7 +6,7 @@
     "helm",
     "helm-template"
   ],
-  "version": "1.1.1",
+  "version": "1.1.2",
   "license": "LICENSE.md",
   "publisher": "VadzimNestsiarenka",
   "icon": "./images/icon.png",
@@ -38,7 +38,7 @@
       "editor/title": [
         {
           "command": "helm-template-preview-and-more.open-helm-template-preview",
-          "when": "resourcePath =~ /.*templates\\/[^\\/]*\\.(yaml)|(yml)/",
+          "when": "resourcePath =~ /.*templates\\/|\\\\[^\\/\\\\]*\\.(yaml)|(yml)/",
           "group": "navigation"
         }
       ]
