@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.1.2 - 2023-09-02
+
+### Added
+
+- Editor title button that opens preview. The button is shown when a file in the editor has yaml or yml extension and it is located in the templates folder.
+
+### Changed
+
+- When preview is opened focus is preserved on the current active editor.
+
 ## 1.0.0 - 2023-08-15
 
 ### Changed

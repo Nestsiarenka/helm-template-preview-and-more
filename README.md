@@ -10,6 +10,10 @@ You start a preview with a command "Open Helm Template Preview".
 
 ![Open Helm Template Preview](https://i.imgur.com/U4nQ35a.gif "Open Helm Template Preview")
 
+Or you can use a button in the editor menu to start a preview.
+
+![Open Helm Template Preview with a Button](https://i.imgur.com/uV4XbHo.png "Open Helm Template Preview with a Button")
+
 The preview is rerendered when Helm template is saved or active editor is changed.
 
 Preview of your subchart templates should work as well.
