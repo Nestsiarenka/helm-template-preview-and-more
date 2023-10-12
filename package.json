@@ -6,7 +6,7 @@
     "helm",
     "helm-template"
   ],
-  "version": "1.1.2",
+  "version": "1.2.0",
   "license": "LICENSE.md",
   "publisher": "VadzimNestsiarenka",
   "icon": "./images/icon.png",
@@ -42,7 +42,24 @@
           "group": "navigation"
         }
       ]
-    }
+    },
+    "configuration": [
+      {
+        "title": "Helm Template Preview",
+        "properties": {
+          "helm-template-preview-and-more.customValueFileNames": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": [
+              "values.yaml"
+            ],
+            "description": "When multiple files defined the higher has precedence over the lower"
+          }
+        }
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
