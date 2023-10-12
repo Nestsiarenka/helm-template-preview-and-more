@@ -7,6 +7,7 @@ import { execSync } from "child_process";
 import constants from "../helm/constants";
 import * as helmFsNavigation from "../helm/helmFsNavigation";
 import * as path from "path";
+import * as fs from "fs";
 
 class HelmTemplateVirtualFileProvider
   implements vscode.TextDocumentContentProvider
@@ -48,10 +49,13 @@ class HelmTemplateVirtualFileProvider
       );
     }
 
+    let customValueFileNames = this.getCustomValuesFileNames(rootChartPath);
+
     const { stdout, stderr } = this.runHelmTemplate(
       rootChartPath,
       templateFileRelativePath,
-      false
+      false,
+      customValueFileNames
     );
 
     if (stderr) {
@@ -62,7 +66,8 @@ class HelmTemplateVirtualFileProvider
       let { stdout: stdoutDebug } = this.runHelmTemplate(
         rootChartPath,
         templateFileRelativePath,
-        true
+        true,
+        customValueFileNames
       );
 
       return (
@@ -79,15 +84,16 @@ class HelmTemplateVirtualFileProvider
     return stdout.toString();
   }
 
-  runHelmTemplate(
+  private runHelmTemplate(
     rootChartPath: string,
     templateFileRelativePath: string,
-    isDebug: boolean
+    isDebug: boolean,
+    customValueFileNames?: string[]
   ): { stdout: Buffer; stderr?: Buffer } {
     try {
       const command = `helm template . --show-only ${templateFileRelativePath}${
         isDebug ? " --debug" : ""
-      }`;
+      } ${this.buildValueFileOptions(customValueFileNames)}`;
       const stdout = execSync(command, {
         cwd: rootChartPath,
       });
@@ -96,6 +102,43 @@ class HelmTemplateVirtualFileProvider
     } catch (e) {
       return e as { stdout: Buffer; stderr: Buffer };
     }
+  }
+
+  private getCustomValuesFileNames(rootChartPath: string) {
+    const configuration = vscode.workspace.getConfiguration(
+      "helm-template-preview-and-more"
+    );
+
+    let customValueFileNames = configuration.get("customValueFileNames") as
+      | string[]
+      | undefined;
+
+    let fileNamesWithAbsolutePath = customValueFileNames
+      ?.map((f) => {
+        const parsedFilePath = path.parse(f);
+        return path.join(parsedFilePath.dir, parsedFilePath.base);
+      })
+      .map((f) => {
+        return {
+          absolutePath: path.isAbsolute(f) ? f : path.join(rootChartPath, f),
+          fileName: f,
+        };
+      });
+
+    return fileNamesWithAbsolutePath
+      ?.filter((x) => fs.existsSync(x.absolutePath))
+      .map((x) => x.fileName);
+  }
+
+  private buildValueFileOptions(customValueFileNames?: string[]) {
+    if (!customValueFileNames) {
+      return "";
+    }
+
+    return customValueFileNames
+      .reverse()
+      .map((x) => `--values "${x}"`)
+      .join(" ");
   }
 
   static fileName = "HelmTemplatePreview.yaml";
