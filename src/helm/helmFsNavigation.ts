@@ -6,6 +6,7 @@ import path = require("path");
 import constants from "./constants";
 import * as fsHelpers from "../common/fsHelpers";
 import fileExtensions from "./fileExtensions";
+import { checkPathContains, getLongestPathTo } from "../common/pathHelpers";
 
 export function resolveRootChartPathOfChart(chartPath: string): string {
   var containingFolder = path.dirname(chartPath);
@@ -24,7 +25,7 @@ export function isTemplatePath(templatePath: string) {
   return (
     [fileExtensions.yaml, fileExtensions.yml].find((x) =>
       templatePath.endsWith(x)
-    ) && path.basename(path.dirname(templatePath)) === constants.templatesFolder
+    ) && checkPathContains(templatePath, constants.templatesFolder)
   );
 }
 
@@ -37,6 +38,12 @@ export function resolveRootChartPathOfTemplate(
     );
   }
 
-  const chartPath = path.dirname(path.dirname(templateFileAbsolutePath));
+  let templatesFolder = getLongestPathTo(
+    templateFileAbsolutePath,
+    constants.templatesFolder
+  );
+
+  const chartPath = path.dirname(templatesFolder);
+
   return resolveRootChartPathOfChart(chartPath);
 }
